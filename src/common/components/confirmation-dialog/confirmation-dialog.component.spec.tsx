@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { ConfirmationDialogComponent } from './confirmation-dialog.component';
 
 describe('Confirmation-dialog component specs', () => {
-  it('View dialog component', () => {
+  it('View dialog component with title and text', () => {
     // Arrange
     interface LabelProps {
       closeButton: string;
@@ -44,8 +44,9 @@ describe('Confirmation-dialog component specs', () => {
       level: 2,
       name: 'Prueba title dialog',
     });
-
     const bodyElement = screen.getByText('Prueba cuerpo dialog');
+    const buttonClose = screen.getByText('Close');
+    const buttonAccept = screen.getByText('Accept');
 
     expect(dialogElement).not.toBeNull();
     expect(dialogElement.tagName).toEqual('DIV');
@@ -53,7 +54,11 @@ describe('Confirmation-dialog component specs', () => {
 
     //titulo
     expect(titleElement).toBeInTheDocument();
-
+    // body
     expect(bodyElement).toBeInTheDocument();
+
+    // buttons
+    expect(buttonClose).toBeInTheDocument();
+    expect(buttonAccept).toBeInTheDocument();
   });
 });
