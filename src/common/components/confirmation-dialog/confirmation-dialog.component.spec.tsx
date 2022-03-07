@@ -1,8 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { ConfirmationDialogComponent } from './confirmation-dialog.component';
-import { useConfirmationDialog } from './confirmation-dialog.hook';
-
 import userEvent from '@testing-library/user-event';
 
 describe('Confirmation-dialog component specs', () => {

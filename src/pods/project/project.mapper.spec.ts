@@ -4,7 +4,7 @@ import { mapProjectFromApiToVm } from './project.mapper';
 import * as projectVM from '../../pods/project/project.vm';
 
 describe('./pods/project/project.mapper', () => {
-  it('Deberia ser object de "Project" vacío cuando es "undefined" en la entrada', () => {
+  it('Must be "Project" object empty when is "undefined" on load', () => {
     // Arrange
     const projectModel: apiModel.Project = undefined;
     const modelEmpty = viewModel.createEmptyProject();
@@ -19,7 +19,7 @@ describe('./pods/project/project.mapper', () => {
     expect(result).toStrictEqual(modelEmpty);
   });
 
-  it('Deberia ser object de "Project" vacío cuando es "null" en la entrada', () => {
+  it('Must be "Project" object empty when is "null" on load', () => {
     // Arrange
     const projectModel: apiModel.Project = null;
     const modelEmpty = viewModel.createEmptyProject();
@@ -33,7 +33,7 @@ describe('./pods/project/project.mapper', () => {
     expect(result).toStrictEqual(modelEmpty);
   });
 
-  it('Debe ser un array empty al pasar un "Project" sin employees', () => {
+  it('Must be array empty when add "Project" without employees', () => {
     // Arrange
     const project: apiModel.Project = {
       id: '0',
@@ -50,7 +50,7 @@ describe('./pods/project/project.mapper', () => {
     expect(result).toStrictEqual(employeesArrEmpty);
   });
 
-  it('Al llamar al mapProjectFromApiToVm con datos devuelve un object con el mismo tipo y valores', () => {
+  it('When call to mapProjectFromApiToVm with data ereturn an object with the same values', () => {
     // Arrange
     const project: apiModel.Project = {
       id: '0',
