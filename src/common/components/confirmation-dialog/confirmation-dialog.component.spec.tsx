@@ -1,64 +1,89 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { ConfirmationDialogComponent } from './confirmation-dialog.component';
+import { useConfirmationDialog } from './confirmation-dialog.hook';
+
+import userEvent from '@testing-library/user-event';
 
 describe('Confirmation-dialog component specs', () => {
   it('View dialog component with title and text', () => {
     // Arrange
-    interface LabelProps {
-      closeButton: string;
-      acceptButton: string;
-    }
-
-    interface Props {
-      isOpen: boolean;
-      onAccept: () => void;
-      onClose: () => void;
-      title: string | React.ReactNode;
-      labels: LabelProps;
-    }
-
-    const labelProps: LabelProps = {
-      closeButton: 'Close',
-      acceptButton: 'Accept',
-    };
-
-    const dialoProps: Props = {
+    const dialoProps = {
       isOpen: true,
       onAccept: () => void {},
       onClose: () => void {},
       title: 'Prueba title dialog',
-      labels: labelProps,
+      labels: {
+        closeButton: 'Close',
+        acceptButton: 'Accept',
+      },
     };
 
     // Act
-    render(
+    const { asFragment } = render(
       <ConfirmationDialogComponent {...dialoProps}>
         Prueba cuerpo dialog
       </ConfirmationDialogComponent>
     );
 
-    // Assert
     const dialogElement = screen.getByRole('dialog');
     const titleElement = screen.getByRole('heading', {
       level: 2,
-      name: 'Prueba title dialog',
+      name: dialoProps.title,
     });
     const bodyElement = screen.getByText('Prueba cuerpo dialog');
-    const buttonClose = screen.getByText('Close');
-    const buttonAccept = screen.getByText('Accept');
+    const buttonClose = screen.getByText(dialoProps.labels.closeButton);
+    const buttonAccept = screen.getByText(dialoProps.labels.acceptButton);
 
+    // Assert
+    expect(asFragment()).toMatchSnapshot();
     expect(dialogElement).not.toBeNull();
     expect(dialogElement.tagName).toEqual('DIV');
     expect(dialogElement).toBeInTheDocument();
 
     //titulo
     expect(titleElement).toBeInTheDocument();
+
     // body
     expect(bodyElement).toBeInTheDocument();
 
     // buttons
     expect(buttonClose).toBeInTheDocument();
     expect(buttonAccept).toBeInTheDocument();
+  });
+
+  it('View dialog component click in close', () => {
+    // Arrange
+    const dialoProps = {
+      isOpen: true,
+      onAccept: () => void {},
+      onClose: jest.fn(),
+      title: 'Prueba title dialog',
+      labels: {
+        closeButton: 'Close',
+        acceptButton: 'Accept',
+      },
+    };
+
+    // Act
+    render(
+      <>
+        <ConfirmationDialogComponent {...dialoProps}>
+          Prueba cuerpo dialog
+        </ConfirmationDialogComponent>
+      </>
+    );
+
+    const dialogElement = screen.getByText(dialoProps.title);
+    const buttonClose = screen.getByRole('button', {
+      name: dialoProps.labels.closeButton,
+    });
+
+    // buttons Click
+    userEvent.click(buttonClose);
+
+    // Assert
+    expect(dialogElement).toBeInTheDocument();
+    expect(dialoProps.onClose).toHaveBeenCalled();
   });
 });
