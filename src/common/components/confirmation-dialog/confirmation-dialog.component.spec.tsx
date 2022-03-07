@@ -74,7 +74,9 @@ describe('Confirmation-dialog component specs', () => {
       </>
     );
 
-    const dialogElement = screen.getByText(dialoProps.title);
+    const dialogElement = screen.getByRole('heading', {
+      name: dialoProps.title,
+    });
     const buttonClose = screen.getByRole('button', {
       name: dialoProps.labels.closeButton,
     });
@@ -85,5 +87,69 @@ describe('Confirmation-dialog component specs', () => {
     // Assert
     expect(dialogElement).toBeInTheDocument();
     expect(dialoProps.onClose).toHaveBeenCalled();
+  });
+
+  it('View dialog component click in accept', () => {
+    // Arrange
+    const dialoProps = {
+      isOpen: true,
+      onAccept: jest.fn(),
+      onClose: () => void {},
+      title: 'Prueba title dialog',
+      labels: {
+        closeButton: 'Close',
+        acceptButton: 'Accept',
+      },
+    };
+
+    // Act
+    render(
+      <>
+        <ConfirmationDialogComponent {...dialoProps}>
+          Prueba cuerpo dialog
+        </ConfirmationDialogComponent>
+      </>
+    );
+
+    const dialogElement = screen.getByText(dialoProps.title);
+    const buttonAccept = screen.getByRole('button', {
+      name: dialoProps.labels.acceptButton,
+    });
+
+    // buttons Click
+    userEvent.click(buttonAccept);
+
+    // Assert
+    expect(dialogElement).toBeInTheDocument();
+    expect(dialoProps.onAccept).toHaveBeenCalled();
+  });
+
+  it('View dialog component not visible', () => {
+    // Arrange
+    const dialoProps = {
+      isOpen: false,
+      onAccept: () => void {},
+      onClose: () => void {},
+      title: 'Prueba title dialog',
+      labels: {
+        closeButton: 'Close',
+        acceptButton: 'Accept',
+      },
+    };
+
+    // Act
+    render(
+      <>
+        <ConfirmationDialogComponent {...dialoProps}>
+          Prueba cuerpo dialog
+        </ConfirmationDialogComponent>
+      </>
+    );
+
+    // screen.debug();
+    const dialogElement = screen.queryByRole('dialog');
+
+    // Assert
+    expect(dialogElement).not.toBeInTheDocument();
   });
 });
